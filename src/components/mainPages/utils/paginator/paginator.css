@@ -1,0 +1,17 @@
+.paginator {
+  display: flex;
+  justify-content: space-between;
+  width: max-content;
+  margin: auto;
+  background-color: rgb(244, 236, 236);
+  margin-top: .5rem;
+  padding-left: .5rem;
+}
+
+.paginator button {
+  margin-right: .5rem;
+}
+
+.paginator button:hover {
+  transform: scale(1.05);
+}
