@@ -2,37 +2,50 @@ import React, { useContext, useState } from "react";
 import GlobalState from "../../../GlobalState";
 
 export const OrderFilter = () => {
-  // states => zipCode, firstName, lastName
-  // states => phoneNumber, isDone, startDate, endDate
   const state = useContext(GlobalState);
-  const [zipCode, setZipCode] = state.UserAPI.orderZipCode;
-  const [firstName, setFirstName] = state.UserAPI.ordererFirstName;
-  const [lastName, setLastName] = state.UserAPI.ordererLastName;
-  const [phoneNumber, setPhoneNumber] = state.UserAPI.ordererPhoneNumber;
-  // const [startDate, setStartDate] = state.UserAPI.orderStartDate;
-  // const [endDate, setEndDate] = state.UserAPI.orderEndDate;
-  const [, setIsDone] = state.UserAPI.orderIsDone;
-  const [, refreshOrders] = state.UserAPI.refresh;
+  const [zipCode, setZipCode] = state.userAPI.orderZipCode;
+  const [phoneNumber, setPhoneNumber] = state.userAPI.ordererPhoneNumber;
+  // const [startDate, setStartDate] = state.userAPI.orderStartDate;
+  // const [endDate, setEndDate] = state.userAPI.orderEndDate;
+  const [isDone, setIsDone] = state.userAPI.orderIsDone;
+  const [refreshValue, refreshCallback] = state.userAPI.refresh;
+  const [, setPage] = state.userAPI.ordersPage;
+
+  // Fields with possible error
   const [postalCodeErr, setPostalCodeErr] = useState("");
   const [phoneNoErr, setPhoneNoErr] = useState("");
 
   // component states itself
   const [toggleForm, setToggleForm] = useState(false);
 
+  // Handle postalCode change
   const handlePostalCodeChange = (e) => {
     const postalCode = e.target.value;
 
-    if (5 < postalCode || postalCode.length > 5) {
+    if (
+      (postalCode.length !== 0 && postalCode.length < 5) ||
+      postalCode.length > 5
+    ) {
       setPostalCodeErr("Postal Codes are 5 characters long.");
+    } else {
+      setPostalCodeErr("");
     }
 
     setZipCode(postalCode);
   };
 
+  // Handle phoneNumber change
   const handlePhoneNumberChange = (e) => {
     const phoneNo = e.target.value;
 
-    if (!/^(\+49)?0?[1|3]([0|5][0-45-9]\d|6([23]|0\d?)|7([0-57-9]|6\d))\d{7}$/.test(phoneNo)) {
+    // If in Germeny local
+    if (phoneNo.length === 0) {
+      setPhoneNoErr("");
+    } else if (
+      !/^(\+49)?0?[1|3]([0|5][0-45-9]\d|6([23]|0\d?)|7([0-57-9]|6\d))\d{7}$/.test(
+        phoneNo
+      )
+    ) {
       setPhoneNoErr("Invalid phone number.");
     } else {
       setPhoneNoErr("");
@@ -41,13 +54,23 @@ export const OrderFilter = () => {
     setPhoneNumber(phoneNo);
   };
 
+  const handleSubmit = (e) => {
+    e.preventDefault();
+
+    if (!phoneNoErr && !postalCodeErr) {
+      setPage(1);
+      refreshCallback(!refreshValue);
+      setToggleForm(!toggleForm);
+    }
+  };
+
   return (
     <div style={{ border: "none", width: "100%" }}>
       {!toggleForm && (
         <button onClick={() => setToggleForm(!toggleForm)}>Filter</button>
       )}
       {toggleForm && (
-        <form style={{ width: "100%" }}>
+        <form onSubmit={handleSubmit}>
           <fieldset
             style={{
               border: "none",
@@ -77,6 +100,7 @@ export const OrderFilter = () => {
                   name="delivery-status"
                   id="deliveryStatusPending"
                   value={false}
+                  isChecked={isDone === false}
                   onChange={(e) => setIsDone(!e.target.value)}
                 />
                 <label htmlFor="deliveryStatusPending">Pending</label>
@@ -91,6 +115,7 @@ export const OrderFilter = () => {
                   name="delivery-status"
                   id="deliveryStatusDeliverd"
                   value={true}
+                  isChecked={isDone === true}
                   onChange={(e) => setIsDone(!!e.target.value)}
                 />
                 <label htmlFor="deliveryStatusDeliverd">Deliverd</label>
@@ -105,6 +130,7 @@ export const OrderFilter = () => {
                   name="delivery-status"
                   id="deliveryStatusBoth"
                   value={""}
+                  isChecked={isDone === ""}
                   onChange={(e) => setIsDone(e.target.value)}
                 />
                 <label htmlFor="deliveryStatusBoth">both</label>
@@ -137,24 +163,6 @@ export const OrderFilter = () => {
               appearance: "none",
             }}>
             <legend>Orderer Properties</legend>
-            <div className="">
-              <label htmlFor="first-name-input">First Name</label>
-              <input
-                type="text"
-                id="first-name-input"
-                value={firstName}
-                onChange={(e) => setFirstName(e.target.value)}
-              />
-            </div>
-            <div className="">
-              <label htmlFor="last-name-input">Last Name</label>
-              <input
-                type="text"
-                id="last-name-input"
-                value={lastName}
-                onChange={() => true}
-              />
-            </div>
             <div className="">
               <label htmlFor="phone-number-input">Phone Number</label>
               <input

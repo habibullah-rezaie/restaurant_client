@@ -6,8 +6,8 @@ import ProductItem from "../utils/productItems/ProductItem";
 function DetailProduct() {
   const params = useParams();
   const state = useContext(GlobalState);
-  const [products] = state.ProductsAPI.products;
-  const addCart = state.UserAPI.addCart;
+  const [products] = state.productsAPI.products;
+  const addCart = state.userAPI.addCart;
   const [detailProduct, setDetailProduct] = useState("");
   useEffect(() => {
     if (params.id) {

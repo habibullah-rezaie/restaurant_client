@@ -1,4 +1,4 @@
-import React, { useContext } from "react";
+import React, { useContext, useEffect } from "react";
 import { Switch, Route } from "react-router-dom";
 import Login from "./auth/Login";
 import Register from "./auth/Register";
@@ -11,9 +11,10 @@ import NotFound from "./utils/not_found/NotFound";
 import Categories from "./categories/Categories";
 import { GlobalState } from "../../GlobalState";
 import CreateProduct from "./createProduct/CreateProduct";
+import Timing from "./timings/Timing";
 function Pages() {
   const state = useContext(GlobalState);
-  const [isAdmin] = state.UserAPI.isAdmin;
+  const [isAdmin] = state.authAPI.isAdmin;
 
   return (
     <Switch>
@@ -36,7 +37,11 @@ function Pages() {
         exact
         component={isAdmin ? CreateProduct : NotFound}
       />
-
+      <Route
+        path="/service_time/"
+        exact
+        component={isAdmin ? Timing : NotFound}
+      />
       <Route path="/history" exact component={OrderHistory} />
       <Route path="/history/:id" exact component={OrderDetail} />
 

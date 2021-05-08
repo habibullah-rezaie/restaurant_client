@@ -1,17 +1,13 @@
 import { useState, useEffect } from "react";
 import axios from "axios";
 
-function UserAPI(token) {
-  const [isLogged, setIsLogged] = useState(false);
-  const [isAdmin, setIsAdmin] = useState(false);
+function UserAPI(token, isAdmin) {
   const [cart, setCart] = useState([]); // Search for localStorage orders stored in the cart
   const [history, setHistory] = useState([]); // Search for localStorage orders stored in the history
   const [orderCount, setOrderCount] = useState(0);
   const [limit, setLimit] = useState(10);
   const [page, setPage] = useState(1);
   const [sort, setSort] = useState("createdAt DESC");
-  const [firstName, setFirstName] = useState("");
-  const [lastName, setLastName] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [endDate, setEndDate] = useState("");
   const [startDate, setStartDate] = useState("");
@@ -20,19 +16,23 @@ function UserAPI(token) {
   const [callback, setCallback] = useState(false);
 
   useEffect(() => {
-    console.log("ran");
     const fetchOrderHistory = async () => {
       const [sortBy, sortDirection] = sort.split(" ");
       try {
+        let url = `http://localhost:8888/admin/orders?page=${page}&limit=${limit}&sortBy=${sortBy}&sortDirection=${sortDirection}`;
+
+        if (phoneNumber) url += `&phoneNumber=${phoneNumber}`;
+        if (endDate) url += `&endDate=${endDate}`;
+        if (startDate) url += `&startDate=${startDate}`;
+        if (isDone !== "") url += `&isDone=${(isDone ? 1 : 0)}`;
+        if (zipCode) url += `&zipCode=${zipCode}`;
+
         const { orders, count } = (
-          await axios.get(
-            `http://localhost:8888/admin/orders?page=${page}&limit=${limit}&sortBy=${sortBy}&sortDirection=${sortDirection}`,
-            {
-              headers: {
-                Authorization: `Barear ${token}`,
-              },
-            }
-          )
+          await axios.get(url, {
+            headers: {
+              Authorization: `Barear ${token}`,
+            },
+          })
         ).data;
 
         setHistory(orders);
@@ -42,10 +42,7 @@ function UserAPI(token) {
       }
     };
 
-    if (token) {
-      setIsLogged(true);
-      setIsAdmin(true);
-
+    if (token || isAdmin) {
       fetchOrderHistory();
     } else {
       try {
@@ -57,7 +54,7 @@ function UserAPI(token) {
         console.warn("Cannot load orders from local storage.");
       }
     }
-  }, [token, limit, page, sort, callback]);
+  }, [token, isAdmin, limit, page, sort, callback]);
 
   const addCart = async (product) => {
     const preExistence = cart.every((item) => {
@@ -71,8 +68,6 @@ function UserAPI(token) {
   };
 
   return {
-    isLogged: [isLogged, setIsLogged],
-    isAdmin: [isAdmin, setIsAdmin],
     cart: [cart, setCart],
     addCart: addCart,
     orders: [history, setHistory],
@@ -80,8 +75,6 @@ function UserAPI(token) {
     ordersLimit: [limit, setLimit],
     ordersPage: [page, setPage],
     ordersSort: [sort, setSort],
-    ordererFirstName: [firstName, setFirstName],
-    ordererLastName: [lastName, setLastName],
     ordererPhoneNumber: [phoneNumber, setPhoneNumber],
     orderEndDate: [endDate, setEndDate],
     orderStartDate: [startDate, setStartDate],

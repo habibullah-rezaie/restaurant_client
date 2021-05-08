@@ -35,10 +35,13 @@ table a {
 }
 
 .alert {
-  padding: .3rem;
+  padding: 0.3rem;
   border: 1px solid transparent;
-  border-radius: 25px;
-  font-size: .9rem;
+  border-radius: 5px;
+  font-size: 0.9rem;
+  width: fit-content;
+  height: fit-content;
+  margin: 1rem auto;
 }
 
 .alert--ok {

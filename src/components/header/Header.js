@@ -9,13 +9,16 @@ import "./header.css";
 import axios from "axios";
 export default function Header() {
   const state = useContext(GlobalState);
-  const [isAdmin] = state.UserAPI.isAdmin;
-  const [cart] = state.UserAPI.cart;
+  const [isAdmin, setIsAdmin] = state.authAPI.isAdmin;
+  const [cart] = state.userAPI.cart;
   const [menu, setMenu] = useState(false);
 
   const logoutUser = async () => {
     const refreshToken = localStorage.getItem("refreshToken");
 
+    if (!refreshToken) {
+      setIsAdmin(false)
+    }
     await axios.delete(
       `http://localhost:8888/auth/logout?refreshToken=${refreshToken}`
     );

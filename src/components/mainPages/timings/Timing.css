@@ -1,0 +1,47 @@
+.timings {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+}
+
+.timings__timings-list {
+  margin-top: 1rem;
+}
+
+.timings__timing-item {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  box-shadow: 1px 1px 1px gray;
+  width: 25rem;
+  padding: 1rem 1rem;
+  margin-bottom: 1rem;
+}
+
+.timings__timing-item > * {
+  flex: 0.5;
+}
+.timing-item__day {
+  color: gray;
+  flex: 0.8;
+}
+
+.timing-item__opening {
+  font-weight: lighter;
+}
+
+.timing-item__closing {
+  font-weight: lighter;
+}
+
+.timing-item__button {
+  flex: 0.3;
+}
+
+.timing-item__button--delete {
+  color: red;
+}
+
+.timing-item__button--edit {
+  color: orange;
+}

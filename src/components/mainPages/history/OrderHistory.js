@@ -1,4 +1,5 @@
 import React, { useContext, useState } from "react";
+import { useHistory } from "react-router-dom";
 import { GlobalState } from "../../../GlobalState";
 import { Paginator } from "../utils/paginator/Paginator";
 import "./history.css";
@@ -6,21 +7,23 @@ import { OrderFilter } from "./OrderFilter";
 
 function OrderHistory() {
   const state = useContext(GlobalState);
-  const [isAdmin] = state.UserAPI.isAdmin;
-  const [orders] = state.UserAPI.orders;
-  const [page, setPage] = state.UserAPI.ordersPage;
-  const [limit, setLimit] = state.UserAPI.ordersLimit;
-  const [sort, setSort] = state.UserAPI.ordersSort;
-  const [count] = state.UserAPI.ordersCount;
+  const [isAdmin] = state.authAPI.isAdmin;
+  const [orders] = state.userAPI.orders;
+  const [page, setPage] = state.userAPI.ordersPage;
+  const [limit, setLimit] = state.userAPI.ordersLimit;
+  // const [sort, setSort] = state.userAPI.ordersSort;
+  // TODO: handle sort later
+  const [count] = state.userAPI.ordersCount;
+  const { push } = useHistory();
 
   return (
     <div className="history-page">
       {/* FIXME: This page's style is crucial */}
       <h2>Orders</h2>
       {/* <h4>You hava {history.lenght} ordered</h4> */}
+          {isAdmin && <OrderFilter />}
       <table>
         <thead>
-          {isAdmin && <OrderFilter />}
           <tr>
             <th>Name</th>
             <th>Date of Purchased</th>
@@ -31,7 +34,7 @@ function OrderHistory() {
         </thead>
         <tbody>
           {orders.map((order) => (
-            <tr key={order.id}>
+            <tr key={order.id} onClick={() => push(`/history/${order.id}`)}>
               <td>
                 {order.Customer.firstName} {order.Customer.lastName}
               </td>

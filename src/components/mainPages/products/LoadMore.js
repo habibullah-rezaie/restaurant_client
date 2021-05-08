@@ -4,8 +4,8 @@ import {GlobalState} from '../../../GlobalState'
 
 function LoadMore() {
     const state = useContext(GlobalState)
-    const [page , setPage] = state.ProductsAPI.page
-    const [productCount] = state.ProductsAPI.count
+    const [page , setPage] = state.productsAPI.page
+    const [productCount] = state.productsAPI.count
 
 
     return (

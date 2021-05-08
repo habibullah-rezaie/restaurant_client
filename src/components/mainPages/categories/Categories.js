@@ -5,13 +5,13 @@ import "./category.css";
 
 function Categories() {
   const state = useContext(GlobalState);
-  const [categories] = state.CategoriesAPI.categories;
+  const [categories] = state.categoriesAPI.categories;
   const [category, setCategory] = useState({
     name: "",
     description: "",
   });
-  const [token] = state.token;
-  const [callback, setCallback] = state.CategoriesAPI.callback;
+  const [token] = state.authAPI.token;
+  const [callback, setCallback] = state.categoriesAPI.callback;
   const [onEdit, setOnEdit] = useState(false);
   const [id, setID] = useState("");
   const [nameErr, setNameErr] = useState("");
@@ -100,7 +100,7 @@ function Categories() {
   return (
     <div className="categories">
       <form onSubmit={createCategory} id="form">
-        <labal htmlfor="category">name:</labal>
+        <label htmlfor="category">name:</label>
         <input
           type="text"
           name="name"
@@ -117,7 +117,7 @@ function Categories() {
           </div>
         )}
 
-        <labal htmlfor="">description:</labal>
+        <label htmlfor="">description:</label>
         <textarea
           type="text"
           name="description"

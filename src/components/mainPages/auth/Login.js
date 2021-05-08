@@ -1,12 +1,17 @@
-import React, { useState } from "react";
+import React, { useContext, useState } from "react";
 import { Link } from "react-router-dom";
 import axios from "axios";
+import GlobalState from "../../../GlobalState";
 
 function Login() {
+  const state = useContext(GlobalState);
+  // const [isAdmin, setIsAdmin] = state.authAPI.isAdmin;
+  const [, setToken] = state.authAPI.token;
   const [user, setUser] = useState({
     email: "",
     password: "",
   });
+
   const onChangeInput = (e) => {
     const { name, value } = e.target;
     setUser({ ...user, [name]: value });
@@ -16,11 +21,12 @@ function Login() {
     e.preventDefault();
 
     try {
-      const { /*token,*/ refreshToken } = (
+      const { token, refreshToken } = (
         await axios.post("http://localhost:8888/auth/login", { ...user })
       ).data;
 
       localStorage.setItem("refreshToken", refreshToken);
+      setToken(token)
       // localStorage.setItem("token", token);
 
       window.location.href = "/";

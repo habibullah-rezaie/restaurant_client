@@ -9,10 +9,10 @@ import LoadMore from "./LoadMore";
 function Products() {
   const state = useContext(GlobalState);
 
-  const [products, setProducts] = state.ProductsAPI.products;
-  const [isAdmin] = state.UserAPI.isAdmin;
-  const [token] = state.token;
-  const [callback, setCallback] = state.ProductsAPI.callback;
+  const [products, setProducts] = state.productsAPI.products;
+  const [isAdmin] = state.authAPI.isAdmin;
+  const [token] = state.authAPI.token;
+  const [callback, setCallback] = state.productsAPI.callback;
   const [loading, setLoading] = useState(false);
   const [isAllSelected, setIsAllSelected] = useState(false);
 

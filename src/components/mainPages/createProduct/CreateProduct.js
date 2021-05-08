@@ -16,19 +16,19 @@ const initialState ={
 function CreateProduct() {
     const state = useContext(GlobalState)
     const [product , setProduct] = useState(initialState)
-    const [categories] = state.CategoriesAPI.categories
+    const [categories] = state.categoriesAPI.categories
     const [images, setImages] = useState(true)
     const [loading , setLoading] = useState(false)
 
-    const [isAdmin] = state.UserAPI.isAdmin
-    const [token] = state.token
+    const [isAdmin] = state.authAPI.isAdmin
+    const [token] = state.authAPI.token
 
     const history = useHistory()
     const param = useParams()
 
-    const [products] = state.ProductsAPI.products
+    const [products] = state.productsAPI.products
     const [onEdit , setOnEdit] = useState(false)
-    const [callback, setCallback] = state.ProductsAPI.callback
+    const [callback, setCallback] = state.productsAPI.callback
     useEffect(()=>{
         if(param.id){
             setOnEdit(true)
@@ -90,6 +90,7 @@ function CreateProduct() {
         const {name , value} = e.target
         setProduct({...product, [name]:value})
     }
+
     const styleUpload ={
         dislay:images ? "block" : "none"
     }
@@ -110,6 +111,7 @@ function CreateProduct() {
                     headers :{Authorization: token}
                 })
             }
+
             setCallback(!callback)
             history.push("/")
              
