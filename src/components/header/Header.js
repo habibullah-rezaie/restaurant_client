@@ -10,7 +10,7 @@ import axios from "axios";
 export default function Header() {
   const state = useContext(GlobalState);
   const [isAdmin, setIsAdmin] = state.authAPI.isAdmin;
-  const [cart] = state.userAPI.cart;
+  const { cart } = state.cartAPI;
   const [menu, setMenu] = useState(false);
 
   async function logoutUser() {

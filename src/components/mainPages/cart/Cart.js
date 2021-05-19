@@ -5,7 +5,7 @@ import axios from "axios";
 import PaypalButton from "./PayPalButton";
 function Cart() {
   const state = useContext(GlobalState);
-  const [cart, setCart] = state.userAPI.cart;
+  const { cart, setCart } = state.cartAPI;
   const [token] = state.authAPI.token;
   const [total, setTotal] = useState(0);
 
