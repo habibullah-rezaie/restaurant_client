@@ -1,5 +1,5 @@
-import React, { useState } from "react";
-import BtnRender from "./BtnRender";
+import React from "react";
+import { Link, useHistory } from "react-router-dom";
 
 function ProductItem({ product, isAdmin, deleteProduct }) {
   const history = useHistory();
@@ -22,12 +22,19 @@ function ProductItem({ product, isAdmin, deleteProduct }) {
         <span>${product.outPrice}</span>
         <p>{product.description}</p>
       </div>
-
-      <BtnRender
-        product={product}
-        loading={loading}
-        deleteProduct={deleteProduct}
-      />
+      {isAdmin && (
+        <>
+          <Link
+            id="btn-buy"
+            to="#!"
+            onClick={() => deleteProduct(product.id, product.files.pubilc_id)}>
+            Delete
+          </Link>
+          <Link id="btn-view" to={`/edit_product/${product.id}`}>
+            Edit
+          </Link>{" "}
+        </>
+      )}
     </div>
   );
 }
