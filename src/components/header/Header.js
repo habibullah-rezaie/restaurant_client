@@ -64,6 +64,22 @@ export default function Header() {
               </NavLink>
             </li>
             <li>
+              <NavLink
+                exact={true}
+                activeClassName="header__link--active"
+                to="/service_time">
+                Service Time
+              </NavLink>
+            </li>
+            <li>
+              <NavLink
+                exact={true}
+                activeClassName="header__link--active"
+                to="/postal_codes/">
+                Postal Codes
+              </NavLink>
+            </li>
+            <li>
               <Link to="/" onClick={logoutUser}>
                 Logout
               </Link>
