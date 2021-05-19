@@ -7,7 +7,10 @@ function ProductItem({ product, isAdmin, deleteProduct }) {
     <div className="product-card">
       <img
         src={`http://localhost:8888/files/${
-          product.images.length > 0 ? product.images[0].fileName : ""
+          product.files.find((file) => file.mimeType !== "video/mp4")
+            ? product.files.find((file) => file.mimeType !== "video/mp4")
+                .fileName
+            : ""
         }`}
         alt=""
       />
