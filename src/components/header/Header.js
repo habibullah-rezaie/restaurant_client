@@ -13,7 +13,7 @@ export default function Header() {
   const [cart] = state.userAPI.cart;
   const [menu, setMenu] = useState(false);
 
-  const logoutUser = async () => {
+  async function logoutUser() {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!refreshToken) {

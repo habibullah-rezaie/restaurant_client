@@ -11,8 +11,9 @@ function ProductsAPI() {
   const [count, setCount] = useState(0);
 
   useEffect(() => {
-    const getProducts = async () => {
-      const [sortBy, sortDirection] = sort.split(' ')
+    console.log("productsAPI run");
+    async function getProducts() {
+      const [sortBy, sortDirection] = sort.split(" ");
       const { products, count } = (
         await axios.get(
           `http://localhost:8888/products?limit=${
@@ -29,7 +30,7 @@ function ProductsAPI() {
 
       setProducts(products);
       setCount(count);
-    };
+    }
     getProducts();
   }, [callback, category, sort, search, page]);
 

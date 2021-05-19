@@ -6,15 +6,18 @@ function CategoriesAPI() {
   const [callback, setCallback] = useState(false);
 
   useEffect(() => {
-    const getCategories = async () => {
+    console.log("categoryAPI ran");
+    async function getCategories() {
       try {
-        const res = await axios.get("http://localhost:8888/products/categories");
+        const res = await axios.get(
+          "http://localhost:8888/products/categories"
+        );
         setCategories(res.data.categories);
       } catch (err) {
-        console.error(err) 
+        console.error(err);
         if (err.response) alert(err.response.data.message);
       }
-    };
+    }
     getCategories();
   }, [callback]);
 
