@@ -1,6 +1,7 @@
 import axios from "axios";
 import React, { useContext, useEffect, useState } from "react";
 import GlobalState from "../../../GlobalState";
+import GlobalErr from "../utils/Error/GlobalErr";
 import Loading from "../utils/loading/Loading";
 
 import "./Timing.css";
@@ -151,21 +152,7 @@ const Timing = () => {
 
   return (
     <main className="timings">
-      {responseError instanceof Array && responseError.length > 0 ? (
-        <div className="alert alert--error">
-          <ul>
-            {responseError.map((err) => (
-              <li key={err}>{err}</li>
-            ))}
-          </ul>
-        </div>
-      ) : (
-        responseError && (
-          <div className="alert alert--error">
-            <p>{responseError}</p>
-          </div>
-        )
-      )}
+      <GlobalErr error={responseError} />
 
       <form className="timings-form" onSubmit={handleFormSubmit}>
         <select
