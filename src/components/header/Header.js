@@ -41,7 +41,6 @@ export default function Header() {
           <>
             <li>
               <NavLink
-                exact={true}
                 activeClassName="header__link--active"
                 to="/create_product">
                 Create Product
