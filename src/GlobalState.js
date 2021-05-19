@@ -12,7 +12,6 @@ export const GlobalState = createContext();
 
 export const DataProvider = ({ children }) => {
   const authAPI = AuthAPI();
-  const userAPI = UserAPI(authAPI.token[0], authAPI.isAdmin[0]);
   const productsAPI = ProductsAPI();
   const categoriesAPI = CategoriesAPI();
   const timingsAPI = TimingAPI();
@@ -24,7 +23,6 @@ export const DataProvider = ({ children }) => {
   const state = {
     authAPI,
     productsAPI,
-    userAPI,
     categoriesAPI,
     timingsAPI,
     postalCodesAPI,
