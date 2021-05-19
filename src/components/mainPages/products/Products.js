@@ -29,7 +29,7 @@ function Products() {
       const deleteProduct = await axios.delete(
         `http://localhost:8888/admin/products/${id}`,
         {
-          headers: { Authorization: token },
+          headers: { Authorization: `Barear ${token}` },
         }
       );
 
@@ -71,13 +71,13 @@ function Products() {
     <>
       <Filters />
 
-      {isAdmin && (
+      {/* {isAdmin && (
         <div className="delete-all">
           <span>Select all</span>
           <input type="checkbox" checked={isAllSelected} onChange={checkAll} />
           <button onClick={deleteAllChecked}>Delete</button>
         </div>
-      )}
+      )} */}
 
       {/* Products */}
       <div className="products">
@@ -88,7 +88,7 @@ function Products() {
               product={product}
               isAdmin={isAdmin}
               deleteProduct={deleteProduct}
-              handleCheck={handleCheck}
+              // handleCheck={handleCheck}
             />
           );
         })}
