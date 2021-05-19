@@ -5,7 +5,7 @@ function ProductsAPI() {
   const [products, setProducts] = useState([]);
   const [callback, setCallback] = useState(false);
   const [category, setCategory] = useState("");
-  const [sort, setSort] = useState('createdAt DESC');
+  const [sort, setSort] = useState("createdAt DESC");
   const [search, setSearch] = useState("");
   const [page, setPage] = useState(1);
   const [count, setCount] = useState(0);
@@ -23,7 +23,7 @@ function ProductsAPI() {
       ).data;
 
       for (const product of products) {
-        product.images = (
+        product.files = (
           await axios.get(`http://localhost:8888/products/${product.id}/files`)
         ).data.files;
       }
