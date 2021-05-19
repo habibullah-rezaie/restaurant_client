@@ -127,6 +127,11 @@ const Timing = () => {
           Authorization: "Bearer " + token,
         },
       });
+
+      setOnEdit(false);
+      setClosing("");
+      setOpening("");
+      setSelectedDay("");
       setTimingsCallback(!timingsCallback);
       setLoading(false);
     } catch (err) {
