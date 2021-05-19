@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useContext, useEffect, useState } from "react";
+import React, { useContext, useState } from "react";
 import GlobalState from "../../../GlobalState";
 import GlobalErr from "../utils/Error/GlobalErr";
 import Loading from "../utils/loading/Loading";
@@ -28,7 +28,6 @@ const Timing = () => {
     "saturday",
   ];
 
-  useEffect(() => {}, [responseError]);
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
