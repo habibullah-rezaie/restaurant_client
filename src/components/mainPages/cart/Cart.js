@@ -1,24 +1,21 @@
-import React, { useContext, useState, useEffect } from "react";
-import { GlobalState } from "../../../GlobalState";
-import { Link } from "react-router-dom";
 import axios from "axios";
+import React, { useContext, useState } from "react";
+import { GlobalState } from "../../../GlobalState";
+import { calcItemPrice } from "../../../helpers/product";
+import CartItem from "./Cartitem/CartItem";
 import PaypalButton from "./PayPalButton";
+
 function Cart() {
   const state = useContext(GlobalState);
-  const { cart, setCart } = state.cartAPI;
-  const [token] = state.authAPI.token;
-  const [total, setTotal] = useState(0);
+  const { cart } = state.cartAPI;
+  const [totals, setTotals] = useState({});
 
-  useEffect(() => {
-    const getTotal = () => {
-      const total = cart.reduce((prev, item) => {
-        return prev + item.outPrice * item.quantity;
-      }, 0);
-
-      setTotal(total);
-    };
-    getTotal();
-  }, [cart]);
+  function calcItemTotal(id, price, qty, toppings, discount) {
+    const total = calcItemPrice(price, qty, toppings, discount);
+    const newTotals = { ...totals, [id]: total };
+    if (total !== totals[id]) setTotals(newTotals);
+    return total;
+  }
 
   const addToCart = async (cart) => {
     await axios.patch(
@@ -30,38 +27,6 @@ function Cart() {
     );
   };
 
-  const increment = (id) => {
-    cart.forEach((item) => {
-      if (item.id === id) {
-        item.quantity += 1;
-      }
-    });
-
-    setCart([...cart]);
-    addToCart(cart);
-  };
-
-  const decrement = (id) => {
-    cart.forEach((item) => {
-      if (item.id === id) {
-        item.quantity === 1 ? (item.quantity = 1) : (item.quantity -= 1);
-      }
-    });
-
-    setCart([...cart]);
-  };
-
-  const removeProduct = (id) => {
-    if (window.confirm("Do you want to delete this product? ")) {
-      cart.forEach((item, index) => {
-        if (item.id === id) {
-          cart.splice(index, 1);
-        }
-      });
-      setCart([...cart]);
-      addToCart(cart);
-    }
-  };
   const tranSuccess = async (payment) => {
     const { paymentID, address } = payment;
 
@@ -77,6 +42,13 @@ function Cart() {
     alert("you have successfulley places an hour");
   };
 
+  function calcTotal() {
+    return Object.keys(totals).reduce(
+      (prevTotal, cartItemId) => prevTotal + totals[cartItemId],
+      0
+    );
+  }
+
   if (cart.length === 0)
     return (
       <h2 style={{ textAlign: "center", fontSize: "5rem" }}>Cart is empty</h2>
@@ -84,34 +56,24 @@ function Cart() {
 
   return (
     <div>
-      {cart.map((product) => (
-        <div className="detail cart" key={product.id}>
-          <img src={product.images.url} alt="" />
-          <div className="box-detail">
-            <h2>{product.title}</h2>
-
-            <h3>${product.outPrice * product.quantity}</h3>
-            <p>{product.description}</p>
-            <p>{product.content}</p>
-
-            <div className="amount">
-              <button onClick={() => decrement(product.id)}> -</button>
-              <span>{product.quantity}</span>
-              <button onClick={() => increment(product.id)}>+</button>
-            </div>
-            <div className="delete" onClick={() => removeProduct(product.id)}>
-              X
-            </div>
-            {/* This is unneccessary */}
-            <Link to="/cart" className="cart">
-              Buy Now
-            </Link>
-          </div>
-        </div>
+      {cart.map((cartItem) => (
+        <CartItem
+          key={cartItem.id}
+          discount={cartItem.product.discount}
+          file={cartItem.product.files.find(
+            (file) => file.mimeType !== "video/mp4"
+          )}
+          qty={cartItem.qty}
+          id={cartItem.id}
+          itemToppings={cartItem.toppings}
+          productId={cartItem.product.id}
+          calcItemTotal={calcItemTotal}
+        />
       ))}
+
       <div className="total">
-        <h3>Total :$ {total}</h3>
-        <PaypalButton total={total} tranSuccess={tranSuccess} />
+        <h3>Total :$ {calcTotal()}</h3>
+        <PaypalButton total={calcTotal()} tranSuccess={tranSuccess} />
       </div>
     </div>
   );
