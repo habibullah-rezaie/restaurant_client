@@ -28,16 +28,17 @@ const AuthAPI = () => {
       };
 
       refreshAccessToken();
+      return () => {
+        clearTimeout(id);
+      };
     }
-
-    if (token) {
-      setIsAdmin(true);
-    }
-  }, []);
+  });
 
   useEffect(() => {
     if (token) {
       setIsAdmin(true);
+    } else {
+      setIsAdmin(false);
     }
   }, [token]);
 
