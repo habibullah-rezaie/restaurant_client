@@ -6,8 +6,7 @@ const TimingAPI = () => {
   const [callback, setCallback] = useState(false);
 
   useEffect(() => {
-    console.log('USEEFFECT TIMING')
-    const fetchTimings = async () => {
+    async function fetchTimings() {
       const routeConfig = {
         method: "get",
         url: "http://localhost:8888/timings",
@@ -22,7 +21,7 @@ const TimingAPI = () => {
           console.error(err);
         }
       }
-    };
+    }
 
     fetchTimings();
   }, [callback]);
