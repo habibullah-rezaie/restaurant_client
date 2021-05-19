@@ -3,13 +3,12 @@ import React, { useContext, useState } from "react";
 import GlobalState from "../../../GlobalState";
 import GlobalErr from "../utils/Error/GlobalErr";
 import Loading from "../utils/loading/Loading";
-
 import "./Timing.css";
 
 const Timing = () => {
   const state = useContext(GlobalState);
   const [token] = state.authAPI.token;
-  const [timings, setTimings] = state.timingsAPI.timings;
+  const [timings] = state.timingsAPI.timings;
   const [timingsCallback, setTimingsCallback] = state.timingsAPI.callback;
   const [selectedDay, setSelectedDay] = useState("");
   const [opening, setOpening] = useState("");
@@ -31,17 +30,22 @@ const Timing = () => {
   const handleFormSubmit = async (e) => {
     e.preventDefault();
 
+    // Invalid day
     if (!selectedDay || !weekdays.includes(selectedDay))
       setReponseError("Invalid day selected.");
+
+    // Start creating
     try {
       setLoading(true);
-      if (!onEdit && (!responseError || responseError.length === 0)) {
+      if (responseError || responseError.length > 0) {
+      } else if (!onEdit) {
         const newTiming = {
           day: selectedDay,
           opening: opening + ":00",
           closing: closing + ":00",
         };
-        const response = await axios({
+
+        await axios({
           method: "post",
           url: "http://localhost:8888/admin/timings/",
           headers: {
@@ -50,10 +54,7 @@ const Timing = () => {
           },
           data: newTiming,
         });
-        setClosing("");
-        setOpening("");
-        setLoading(false);
-      } else if (!responseError || responseError.length === 0) {
+      } else {
         const timing = timings.find((tm) => tm.day === selectedDay);
 
         if (timing && token) {
@@ -69,7 +70,7 @@ const Timing = () => {
               ? closing
               : closing + ":00",
           };
-          const response = await axios({
+          await axios({
             method: "put",
             url: "http://localhost:8888/admin/timings/" + timing.day,
             headers: {
@@ -79,20 +80,21 @@ const Timing = () => {
             data: newTiming,
           });
 
-          setTimingsCallback(!timingsCallback);
           setOnEdit(false);
         }
       }
+
+      setClosing("");
+      setOpening("");
       setLoading(false);
+      setTimingsCallback(!timingsCallback);
     } catch (err) {
       if (err.response) {
         if (err.response.data.details)
           setReponseError(err.response.data.details);
-        else setReponseError(err.response.data.messgae);
-
-        return setLoading(false);
+        else setReponseError(err.response.data.message);
+      } else {
       }
-      setReponseError(err.message);
       setLoading(false);
     }
   };
@@ -104,7 +106,6 @@ const Timing = () => {
     } else if (!e.target.value || !opening) {
       setReponseError("Select an opening time.");
     }
-    // TODO: check for validity
   };
 
   const handleClosingInput = (e) => {
@@ -114,7 +115,6 @@ const Timing = () => {
     } else if (!e.target.value || !closing) {
       setReponseError("Select a closing time.");
     }
-    // TODO: check for validity
   };
 
   const handleDeleteTiming = async (day) => {
@@ -139,10 +139,9 @@ const Timing = () => {
         if (err.response.data.details)
           setReponseError(err.response.data.details);
         else setReponseError(err.response.data.messgae);
-
-        setLoading(false);
+      } else {
+        setReponseError(err.message);
       }
-      setReponseError(err.message);
       setLoading(false);
     }
   };
