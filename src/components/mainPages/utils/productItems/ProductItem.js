@@ -13,9 +13,11 @@ function ProductItem({ product, isAdmin, deleteProduct }) {
             : ""
         }`}
         alt=""
+        onClick={() => history.push(`/detail/${product.id}#top`)}
       />
-
-      <div className="product-box">
+      <div
+        className="product-box"
+        onClick={() => history.push(`/detail/${product.id}#top`)}>
         <h2 title={product.title}>{product.title}</h2>
         <span>${product.outPrice}</span>
         <p>{product.description}</p>
