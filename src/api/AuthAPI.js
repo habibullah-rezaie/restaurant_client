@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useEffect, useState } from "react";
+import { useEffect, useState } from "react";
 
 const AuthAPI = () => {
   const [token, setToken] = useState("");
@@ -8,19 +8,21 @@ const AuthAPI = () => {
 
   useEffect(() => {
     const refreshToken = localStorage.getItem("refreshToken");
-
+    let id;
     if (refreshToken) {
-      const refreshAccessToken = async () => {
+      async function refreshAccessToken() {
         try {
+          console.log("auth api run 1");
           const res = await axios.get(
             `http://localhost:8888/auth/token?refreshToken=${refreshToken}`
           );
 
           setToken(res.data.token);
+          setIsAdmin(true);
 
-          setTimeout(() => {
+          id = setTimeout(() => {
             refreshAccessToken();
-          }, 60 * 1000);
+          }, 15 * 60 * 1000);
         } catch (err) {
           console.error(err);
           if (err.response) alert(err.response.data.message);
