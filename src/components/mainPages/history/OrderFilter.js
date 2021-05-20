@@ -1,5 +1,30 @@
-import React, { useContext, useState } from "react";
+import React, { useContext, useReducer, useState } from "react";
 import GlobalState from "../../../GlobalState";
+
+const filtersReducer = (state, action) => {
+  switch (action.type) {
+    case "SET_IS_DONE":
+      return { ...state, isDone: action.isDone };
+    case "SET_PHONE_NUMBER":
+      return { ...state, phoneNumber: action.phoneNumber };
+    case "SET_ZIP_CODE":
+      return { ...state, zipCode: action.zipCode };
+    case "SET_START_DATE":
+      return { ...state, startDate: action.startDate };
+    case "SET_END_DATE":
+      return { ...state, endDate: action.endDate };
+    case "RESET":
+      return {
+        isDone: "",
+        endDate: "",
+        startDate: "",
+        phoneNumber: "",
+        zipCode: "",
+      };
+    default:
+      return {};
+  }
+};
 
 export const OrderFilter = () => {
   const state = useContext(GlobalState);
@@ -17,6 +42,13 @@ export const OrderFilter = () => {
 
   // component states itself
   const [toggleForm, setToggleForm] = useState(false);
+  const [filters, dispatch] = useReducer(filtersReducer, {
+    zipCode,
+    phoneNumber,
+    isDone,
+    startDate,
+    endDate,
+  });
 
   // Handle postalCode change
   const handlePostalCodeChange = (e) => {
@@ -31,7 +63,7 @@ export const OrderFilter = () => {
       setPostalCodeErr("");
     }
 
-    setZipCode(postalCode);
+    dispatch({ type: "SET_ZIP_CODE", zipCode: postalCode });
   };
 
   // Handle phoneNumber change
@@ -51,7 +83,7 @@ export const OrderFilter = () => {
       setPhoneNoErr("");
     }
 
-    setPhoneNumber(phoneNo);
+    dispatch({ type: "SET_PHONE_NUMBER", phoneNumber: phoneNo });
   };
 
   const handleSubmit = (e) => {
@@ -89,7 +121,7 @@ export const OrderFilter = () => {
             <input
               type="text"
               id="postal-code-input"
-              value={zipCode}
+              value={filters.zipCode}
               onChange={handlePostalCodeChange}
             />
 
@@ -99,13 +131,15 @@ export const OrderFilter = () => {
                 className=""
                 style={{ display: "flex", alignItems: "center" }}>
                 <input
-                  style={{ marginRight: ".2rem" }}
                   type="radio"
                   name="delivery-status"
                   id="deliveryStatusPending"
                   value={false}
-                  isChecked={isDone === false}
-                  onChange={(e) => setIsDone(!e.target.value)}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_IS_DONE", isDone: !e.target.value })
+                  }
+                  checked={filters.isDone === false}
+                  style={{ marginRight: ".2rem" }}
                 />
                 <label htmlFor="deliveryStatusPending">Pending</label>
               </div>
@@ -119,8 +153,10 @@ export const OrderFilter = () => {
                   name="delivery-status"
                   id="deliveryStatusDeliverd"
                   value={true}
-                  isChecked={isDone === true}
-                  onChange={(e) => setIsDone(!!e.target.value)}
+                  checked={filters.isDone === true}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_IS_DONE", isDone: !!e.target.value })
+                  }
                 />
                 <label htmlFor="deliveryStatusDeliverd">Deliverd</label>
               </div>
@@ -134,8 +170,10 @@ export const OrderFilter = () => {
                   name="delivery-status"
                   id="deliveryStatusBoth"
                   value={""}
-                  isChecked={isDone === ""}
-                  onChange={(e) => setIsDone(e.target.value)}
+                  checked={filters.isDone === ""}
+                  onChange={(e) =>
+                    dispatch({ type: "SET_IS_DONE", isDone: e.target.value })
+                  }
                 />
                 <label htmlFor="deliveryStatusBoth">both</label>
               </div>
@@ -172,7 +210,7 @@ export const OrderFilter = () => {
               <input
                 type="text"
                 id="phone-number-input"
-                value={phoneNumber}
+                value={filters.phoneNumber}
                 onChange={handlePhoneNumberChange}
               />
               <div className="err">
@@ -185,7 +223,17 @@ export const OrderFilter = () => {
             style={{
               border: "none",
               appearance: "none",
+              display: "flex",
             }}>
+            <button
+              className="btn--clear"
+              onClick={(e) => {
+                dispatch({ type: "RESET" });
+
+              }}
+              style={{ flex: ".5" }}>
+              Clear Filters
+            </button>
             <button type="submit">Ok</button>
           </fieldset>
         </form>
