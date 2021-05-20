@@ -8,12 +8,12 @@ import { OrderFilter } from "./OrderFilter";
 function OrderHistory() {
   const state = useContext(GlobalState);
   const [isAdmin] = state.authAPI.isAdmin;
-  const [orders] = state.userAPI.orders;
-  const [page, setPage] = state.userAPI.ordersPage;
-  const [limit, setLimit] = state.userAPI.ordersLimit;
-  // const [sort, setSort] = state.userAPI.ordersSort;
+  const [orders] = state.ordersAPI.orders;
+  const [page, setPage] = state.ordersAPI.ordersPage;
+  const [limit, setLimit] = state.ordersAPI.ordersLimit;
+  // const [sort, setSort] = state.ordersAPI.ordersSort;
   // TODO: handle sort later
-  const [count] = state.userAPI.ordersCount;
+  const [count] = state.ordersAPI.ordersCount;
   const { push } = useHistory();
 
   return (
