@@ -3,13 +3,13 @@ import GlobalState from "../../../GlobalState";
 
 export const OrderFilter = () => {
   const state = useContext(GlobalState);
-  const [zipCode, setZipCode] = state.userAPI.orderZipCode;
-  const [phoneNumber, setPhoneNumber] = state.userAPI.ordererPhoneNumber;
-  // const [startDate, setStartDate] = state.userAPI.orderStartDate;
-  // const [endDate, setEndDate] = state.userAPI.orderEndDate;
-  const [isDone, setIsDone] = state.userAPI.orderIsDone;
-  const [refreshValue, refreshCallback] = state.userAPI.refresh;
-  const [, setPage] = state.userAPI.ordersPage;
+
+  const [zipCode, setZipCode] = state.ordersAPI.orderZipCode;
+  const [phoneNumber, setPhoneNumber] = state.ordersAPI.ordererPhoneNumber;
+  const [startDate, setStartDate] = state.ordersAPI.orderStartDate;
+  const [endDate, setEndDate] = state.ordersAPI.orderEndDate;
+  const [isDone, setIsDone] = state.ordersAPI.orderIsDone;
+  const [, setPage] = state.ordersAPI.ordersPage;
 
   // Fields with possible error
   const [postalCodeErr, setPostalCodeErr] = useState("");
