@@ -59,7 +59,11 @@ export const OrderFilter = () => {
 
     if (!phoneNoErr && !postalCodeErr) {
       setPage(1);
-      refreshCallback(!refreshValue);
+      setEndDate(filters.endDate);
+      setStartDate(filters.startDate);
+      setZipCode(filters.zipCode);
+      setPhoneNumber(filters.phoneNumber);
+      setIsDone(filters.isDone);
       setToggleForm(!toggleForm);
     }
   };
