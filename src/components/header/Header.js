@@ -17,8 +17,9 @@ export default function Header() {
     const refreshToken = localStorage.getItem("refreshToken");
 
     if (!refreshToken) {
-      setIsAdmin(false)
+      setIsAdmin(false);
     }
+
     await axios.delete(
       `http://localhost:8888/auth/logout?refreshToken=${refreshToken}`
     );
@@ -26,7 +27,7 @@ export default function Header() {
     localStorage.removeItem("refreshToken");
 
     window.location.href = "/";
-  };
+  }
 
   const renderTabs = () => {
     return (
